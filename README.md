@@ -1,54 +1,107 @@
-# MISP-IOC-Importer-For-QRadar
-This QRadar application allows users to import Indicators of Compromise (IOCs) from MISP to QRadar. Users input server details, API keys, and polling interval for automated data transfer. The app displays the last 10 imported IOCs and maintains operational logs for monitoring its activities and troubleshooting issues.
+# MISP IOC Importer for QRadar
 
+[![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://www.python.org/)
+[![QRadar](https://img.shields.io/badge/QRadar-7.3+-red.svg)](https://www.ibm.com/products/qradar-siem)
+[![MISP](https://img.shields.io/badge/MISP-2.4+-green.svg)](https://www.misp-project.org/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
-QRadar SDK documentation ``` https://www.ibm.com/support/pages/qradar-whats-new-app-framework-sdk-v200 ```
+> Automate threat intelligence import from MISP into IBM QRadar SIEM reference sets
 
-how to install QRadar SDK ``` https://www.ibm.com/support/pages/qradar-whats-new-app-framework-sdk-v200#i ```
+---
 
-To install the app on QRadar using the SDK, follow these simple steps:
+## Overview
 
-Step 1: Identify Default Server and User Values (Optional)
+This QRadar application enables seamless integration between MISP (Malware Information Sharing Platform) and IBM QRadar SIEM, automatically importing Indicators of Compromise (IOCs) into QRadar reference sets for enhanced threat detection.
 
-``` qapp server -q <QRadar_server> -u <QRadar_user> ```
+**Key Features:**
+- ✅ Automated IOC synchronization from MISP to QRadar
+- ✅ Configurable polling intervals
+- ✅ Real-time monitoring dashboard
+- ✅ Operational logging system
+- ✅ Flexible deployment (QRadar App or Docker)
 
-Step 2: Package the App
+---
 
-``` qapp package -p com.mycompany.myapp.zip ```
+## Quick Start
 
-Step 3: Deploy the App to QRadar
+### Prerequisites
+- IBM QRadar SIEM 7.3+
+- QRadar App Framework SDK v2.0+
+- MISP instance with API access
+- Python 3.7+
 
-``` qapp deploy -q <QRadar_server> -u <QRadar_user> -p com.mycompany.myapp.zip ```
+### Installation
 
-Replace <QRadar_server> with the IP or hostname of your QRadar console and <QRadar_user> with the username of a user with the necessary permissions to deploy apps. The app will be uploaded to QRadar and installed for use.
-nstall```
+**Deploy to QRadar:**
+```bash
+# Package application
+qapp package -p mispimporter.zip
 
----> Route To run on QRadar ---> @viewsbp.route('/index', methods=['GET', 'POST']) # for QRadar
+# Deploy to QRadar
+qapp deploy -q <QRadar_server> -u <QRadar_user> -p mispimporter.zip
+```
 
----> Route To run on Docker locally  ---> @viewsbp.route('/', methods=['GET', 'POST']) # for Local system
+**Run with Docker:**
+```bash
+docker build -t misp-qradar-importer .
+docker run -p 5000:5000 misp-qradar-importer
+```
 
-This application provides a web interface for users to import Indicators of Compromise (IOCs) from the MISP threat sharing platform to the QRadar security information and event management system. 
+---
 
-### Here are five tasks that the application carries out: ###
+## Configuration
 
-* Collecting User Input: The application provides an interface for users to input data necessary for importing IOCs from MISP to QRadar, including the MISP and QRadar server details, the API keys for both systems, the reference set name for QRadar, a polling interval, an event ID, and an IOC type.
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| **MISP Server** | MISP instance URL | `https://misp.example.com` |
+| **MISP API Key** | Authentication token | `your-api-key` |
+| **QRadar Server** | QRadar console URL | `https://qradar.example.com` |
+| **QRadar API Key** | SEC token | `your-token` |
+| **Reference Set** | Target reference set | `MISP_IOCs` |
+| **Polling Interval** | Sync frequency (seconds) | `300` |
+| **Event ID** | MISP event to import | `123` |
+| **IOC Type** | Indicator types | `ip-src`, `domain`, `url` |
 
-* Initiating Import Process: Once the user has inputted all the necessary information and clicks the "Import IOC's" button, the application initiates the import process from MISP to QRadar.
+---
 
-* Displaying Last 10 IOCs: The application displays the last 10 imported IOCs in a table format for user reference.
+## Usage
 
-* Displaying Application Logs: The application has a logging feature where it displays logs regarding the application's operations in real-time. These logs help users keep track of what the application is doing and if there are any errors occurring.
+1. Navigate to **QRadar → Admin → Extension Management**
+2. Open **MISP IOC Importer** application
+3. Configure connection parameters
+4. Click **"Import IOCs"** to start synchronization
+5. Monitor import status in dashboard
 
-* Handling Polling Operations: The application handles automatic polling based on the user's inputted interval, fetching new IOCs from MISP and importing them to QRadar. This operation is performed regularly and is counted down in the application's interface.
+---
 
-### Potential improvements for the application could include: ###
+## Documentation
 
-* Validation of User Input: Currently, it seems like there is no validation for user input. Implementing validation checks for correct formats and data types can prevent errors in operation.
+- [QRadar App Framework SDK](https://www.ibm.com/support/pages/qradar-whats-new-app-framework-sdk-v200)
+- [MISP API Documentation](https://www.misp-project.org/openapi/)
+- [Application Manual](app-documentation.pdf)
 
-* Error Handling and Display: While the application does log error messages, it would be beneficial to display these errors more prominently to users, for instance, by using pop-up alerts.
+---
 
-* Secure Storage of API Keys: Right now, API keys are just inputted and transmitted. A more secure method of storing and transmitting these keys would be a significant improvement.
+## Contributing
 
-* User Authentication: The application does not currently have any form of user authentication. Implementing a user system would improve security and allow for more personalized experiences.
+We welcome contributions! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Submit a pull request
 
-* Expand Supported IOC Types: Currently, the application supports a limited number of IOC types. Expanding this list to include other common IOC types can broaden the tool's usefulness.
+---
+
+## License
+
+GPL-3.0 License - See [LICENSE](LICENSE) file
+
+---
+
+## Support
+
+- [Report Issues](https://github.com/IBM/qradar-misp-ioc-importer/issues)
+- [IBM Security](https://www.ibm.com/security)
+
+---
+
+**Developed and maintained by IBM Security**
